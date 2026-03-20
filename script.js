@@ -7,7 +7,7 @@
         
         //INICIALIZAR EMAILJS 
         if (typeof emailjs !== 'undefined') {
-            emailjs.init("TU_PUBLIC_KEY_AQUI"); 
+            emailjs.init("GQ8RAqwZuzVetzrvv"); 
             console.log('✅ EmailJS inicializado');
         } else {
             console.error('❌ EmailJS no está cargado. Verifica que incluiste el script.');
