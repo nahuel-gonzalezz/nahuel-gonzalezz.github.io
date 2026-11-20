@@ -1,206 +1,583 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nahuel Gonzalez | Desarrollador web</title>
-<meta name="description" content="Desarrollo sitios web a medida, landing pages y tiendas online para negocios y emprendedores.">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio - Nahuel</title>
+    <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-8YC4ZTNTPV"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
+
   gtag('config', 'G-8YC4ZTNTPV');
 </script>
-<link rel="icon" href="./Imagenes/logo-fondo.png" type="image/png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="./Imagenes/logo-fondo.png" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
-<body class="loading">
-
-<div class="loader" id="loader" aria-hidden="true">
-  <img src="Imagenes/logo-fondo.png" alt="">
-  <p>Cargando</p>
-</div>
-
-<header class="header">
-  <a href="#inicio" class="brand">
-    <span class="brand-logo"><img src="Imagenes/logo.png" alt=""></span>
-    <span>Hola, soy Nahuel</span>
-  </a>
-  <button class="menu-btn" id="menuBtn" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav"><i class="fas fa-bars"></i></button>
-  <nav class="nav" id="nav" aria-label="Principal">
-    <a href="#inicio">Inicio</a>
-    <a href="#sobre-mi">Sobre mí</a>
-    <a href="#servicios">Servicios</a>
-    <a href="#proyectos">Proyectos</a>
-    <a href="#contacto">Contacto</a>
-  </nav>
-  <div class="overlay" id="overlay"></div>
-</header>
-
-<main>
-<section class="hero" id="inicio">
-  <div class="hero-box">
-    <h1>Desarrollador<br>web</h1>
-    <p class="hero-sub">Sitios a medida para negocios que quieren vender más.</p>
-    <div class="character">
-      <span class="bubble-hi">Hola, soy Nahuel</span>
-      <img src="Imagenes/N-saludando.png" alt="Nahuel saludando">
+<body>
+    <div class="loader-screen" id="loaderScreen">
+        <div class="loader-content">
+            <div class="loader-logo">
+                <img src="./Imagenes/logo-fondo.png" alt="Cargando...">
+            </div>
+            <div class="loader-text">Cargando...</div>
+        </div>
     </div>
-    <div class="phones" aria-hidden="true">
-      <div class="col"><div class="scroll-group" data-from="1"></div></div>
-      <div class="col rev"><div class="scroll-group" data-from="6"></div></div>
+      <div class="main-content" id="mainContent"> 
+    <header class="main-header">
+        <div class="logo-area">
+            <div class="logo-circle">
+                <img src="Imagenes/logo.png" alt="Logo" class="nav-logo">
+            </div>
+            <span>Hola, soy Nahuel</span>
+        </div>
+        
+        <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <nav class="nav-menu" id="navMenu">
+            <a href="#inicio" class="nav-link" data-target="inicio">Inicio</a>
+            <a href="#sobre-mi" class="nav-link" data-target="sobre-mi">Sobre mí</a>
+            <a href="#servicios" class="nav-link" data-target="servicios">Servicios</a>
+            <a href="#proyectos" class="nav-link" data-target="proyectos">Mis proyectos</a>
+            <a href="#contacto" class="nav-link" data-target="contacto">Contacto</a>
+        </nav>
+        
+        <button class="menu-close" id="menuClose" aria-label="Cerrar menú">
+            <i class="fas fa-times"></i>
+        </button>
+        
+        <div class="menu-overlay" id="menuOverlay"></div>
+    </header>
+
+    <main class="hero-section" id="inicio">
+        <div class="hero-container">
+            <h1 class="hero-title">
+                Desarrollador<br>web
+            </h1>
+            <div class="character-wrapper">
+                <div class="speech-bubble">Hola, soy Nahuel</div>
+                <img src="Imagenes/N-saludando.png" alt="Nahuel" class="character-img">
+            </div>
+            <div class="phones-container">
+                <div class="column col-1">
+                    <div class="scroll-group" id="group1">
+                        <img src="Imagenes/celu1.png" alt="Celular 1">
+                        <img src="Imagenes/celu2.png" alt="Celular 2">
+                        <img src="Imagenes/celu3.png" alt="Celular 3">
+                        <img src="Imagenes/celu4.png" alt="Celular 4">
+                        <img src="Imagenes/celu5.png" alt="Celular 5">
+                    </div>
+                </div>
+                <div class="column col-2">
+                    <div class="scroll-group" id="group2">
+                        <img src="Imagenes/celu6.png" alt="Celular 6">
+                        <img src="Imagenes/celu7.png" alt="Celular 7">
+                        <img src="Imagenes/celu8.png" alt="Celular 8">
+                        <img src="Imagenes/celu9.png" alt="Celular 9">
+                        <img src="Imagenes/celu10.png" alt="Celular 10">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="slider">
+        <div class="slide-track">
+            <div class="slide"><i class="fa-brands fa-html5"></i><span>HTML5</span></div>
+            <div class="slide"><i class="fa-brands fa-css3-alt"></i><span>CSS3</span></div>
+            <div class="slide"><i class="fa-brands fa-js"></i><span>JS</span></div>
+            <div class="slide"><i class="fa-brands fa-php"></i><span>PHP</span></div>
+            <div class="slide"><i class="fa-solid fa-database"></i><span>MYSQL</span></div>
+            <div class="slide"><i class="fa-solid fa-code"></i><span>JSON</span></div>
+            <div class="slide"><i class="fa-brands fa-wordpress"></i><span>WORDPRESS</span></div>
+            <div class="slide"><i class="fa-brands fa-figma"></i><span>FIGMA</span></div>
+            <div class="slide"><i class="fa-solid fa-pen-nib"></i><span>AFFINITY</span></div>
+            <div class="slide"><i class="fa-brands fa-github"></i><span>GITHUB</span></div>
+            <div class="slide"><i class="fa-brands fa-html5"></i><span>HTML5</span></div>
+            <div class="slide"><i class="fa-brands fa-css3-alt"></i><span>CSS3</span></div>
+            <div class="slide"><i class="fa-brands fa-js"></i><span>JS</span></div>
+            <div class="slide"><i class="fa-brands fa-php"></i><span>PHP</span></div>
+            <div class="slide"><i class="fa-solid fa-database"></i><span>MYSQL</span></div>
+            <div class="slide"><i class="fa-solid fa-code"></i><span>JSON</span></div>
+            <div class="slide"><i class="fa-brands fa-wordpress"></i><span>WORDPRESS</span></div>
+            <div class="slide"><i class="fa-brands fa-figma"></i><span>FIGMA</span></div>
+            <div class="slide"><i class="fa-solid fa-pen-nib"></i><span>AFFINITY</span></div>
+            <div class="slide"><i class="fa-brands fa-github"></i><span>GITHUB</span></div>
+        </div>
     </div>
-  </div>
-</section>
 
-<div class="marquee" aria-label="Tecnologías">
-  <div class="marquee-track" id="techTrack">
-    <div><i class="fa-brands fa-html5"></i><span>HTML5</span></div>
-    <div><i class="fa-brands fa-css3-alt"></i><span>CSS3</span></div>
-    <div><i class="fa-brands fa-js"></i><span>JavaScript</span></div>
-    <div><i class="fa-brands fa-php"></i><span>PHP</span></div>
-    <div><i class="fa-solid fa-database"></i><span>MySQL</span></div>
-    <div><i class="fa-solid fa-code"></i><span>JSON</span></div>
-    <div><i class="fa-brands fa-wordpress"></i><span>WordPress</span></div>
-    <div><i class="fa-brands fa-figma"></i><span>Figma</span></div>
-    <div><i class="fa-solid fa-pen-nib"></i><span>Affinity</span></div>
-    <div><i class="fa-brands fa-github"></i><span>GitHub</span></div>
-  </div>
-</div>
-
-<section class="wrap" id="sobre-mi">
-  <div class="about">
-    <div class="about-card">
-      <h2 class="about-title">Sobre mí</h2>
-      <div class="canvas">
-        <button class="info-bubble b-quien" data-key="quien">Quién soy</button>
-        <button class="info-bubble b-como" data-key="como">Cómo trabajo</button>
-        <button class="info-bubble b-que" data-key="que">Qué hago</button>
-        <button class="info-bubble b-enfoque" data-key="enfoque">Mi enfoque</button>
-        <button class="info-bubble b-objetivo" data-key="objetivo">Mi objetivo</button>
-        <div class="about-char"><img src="Imagenes/N-saludando.png" alt=""></div>
-      </div>
-      <div class="about-panel" id="aboutPanel" role="dialog" aria-live="polite" hidden>
-        <button class="panel-close" id="panelClose" aria-label="Cerrar">&times;</button>
-        <div id="aboutText"></div>
-      </div>
+    <div class="about-wrapper" id="sobre-mi" class="scroll-margin">
+        <section class="about-container">
+            <div class="main-card">
+                <h1 class="main-title"> Sobre mí </h1>
+                <div class="canvas-area">
+                    <button class="info-bubble bubble-quien" data-key="quien"> Quién soy </button>
+                    <button class="info-bubble bubble-como" data-key="como"> Cómo trabajo </button>
+                    <button class="info-bubble bubble-que" data-key="que"> Qué hago </button>
+                    <button class="info-bubble bubble-enfoque" data-key="enfoque"> Mi enfoque </button>
+                    <button class="info-bubble bubble-objetivo" data-key="objetivo"> Mi objetivo </button>
+                    <div class="character-illustration">
+                        <img src="Imagenes/N-saludando.png" alt="Nahuel ilustración">
+                    </div>
+                </div>
+                <div id="text-display-panel" class="text-display-panel">
+                    <p id="display-text"></p>
+                    <button id="close-panel" class="close-btn">&times;</button>
+                </div>
+            </div>
+            <aside class="social-sidebar">
+                <a href="https://www.instagram.com/nahuel_gonzalez.css/" target="_blank" class="social-link">
+                    <i class="fa-brands fa-instagram"></i>
+                    <span class="social-user">@nahuel_gonzalez.css</span>
+                </a>
+                <a href="https://www.linkedin.com/in/nahuel-matiacevich/" target="_blank" class="social-link">
+                    <i class="fa-brands fa-linkedin-in"></i>
+                    <span class="social-user">Nahuel Matiacevich</span>
+                </a>
+                <a href="https://github.com/nahuel-gonzalezz" target="_blank" class="social-link">
+                    <i class="fa-brands fa-github"></i>
+                    <span class="social-user">nahuel-gonzalezz</span>
+                </a>
+                <a href="mailto:tuemail@ejemplo.com" class="social-link">
+                    <i class="fa-solid fa-envelope"></i>
+                    <span class="social-user">Contacto Email</span>
+                </a>
+            </aside>
+        </section>
     </div>
-    <aside class="social">
-      <a href="https://www.instagram.com/nahuel_gonzalez.css/" target="_blank" rel="noopener"><i class="fa-brands fa-instagram"></i>@nahuel_gonzalez.css</a>
-      <a href="https://www.linkedin.com/in/nahuel-matiacevich/" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin-in"></i>Nahuel Matiacevich</a>
-      <a href="https://github.com/nahuel-gonzalezz" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i>nahuel-gonzalezz</a>
-      <a href="mailto:nahuel.gonzalez@fenixsolutions.com.ar"><i class="fa-solid fa-envelope"></i>Escribime por mail</a>
-    </aside>
-  </div>
-</section>
 
-<section class="wrap" id="servicios">
-  <h2 class="title">Servicios</h2>
-  <div class="grid">
-    <article class="card"><i class="fas fa-rocket"></i><h3>Landing pages</h3><p>Diseñadas para convertir visitantes en clientes. Ideales para negocios, servicios y campañas publicitarias.</p></article>
-    <article class="card"><i class="fas fa-laptop-code"></i><h3>Sitios web personalizados</h3><p>Desarrollo único adaptado a tu negocio, con diseño moderno y optimización mobile.</p></article>
-    <article class="card card-img"><h2>Soluciones tecnológicas a tus necesidades</h2></article>
-    <article class="card wide"><i class="fas fa-gears"></i><h3>Soluciones personalizadas</h3><p>Si tu negocio necesita una función específica o una integración particular, puedo desarrollarla. Cada sitio resuelve problemas reales.</p></article>
-    <article class="card"><i class="fas fa-comment-dots"></i><h3>Mensajería directa</h3><p>Contacto rápido por WhatsApp, formularios o botones de consulta.</p></article>
-    <article class="card"><i class="fas fa-shopping-basket"></i><h3>Tiendas online</h3><p>Vendé tus productos con catálogo y carrito integrado.</p></article>
-    <button class="card card-plus" id="servicesMore"><span>+</span>Ver todos los servicios</button>
-  </div>
-</section>
+    <section class="container" id="servicios" class="scroll-margin">
+        <h1 class="service-title">Servicios</h1>
+        <div class="grid-layout">
+            <div class="card orange-card">
+                <i class="fas fa-rocket card-icon"></i>
+                <h3>Landing Pages</h3>
+                <p>Diseñadas para convertir visitantes en clientes.</p>
+                <p><strong>Ideales para:</strong></p>
+                <ul>
+                    <li>negocios y servicios</li>
+                    <li>campañas publicitarias</li>
+                </ul>
+            </div>
+            <div class="card orange-card">
+                <i class="fas fa-laptop-code card-icon"></i>
+                <h3>Sitios web personalizados</h3>
+                <p>Desarrollo único adaptado a tu negocio.</p>
+                <ul>
+                    <li>diseño moderno</li>
+                    <li>optimización mobile</li>
+                </ul>
+            </div>
+            <div class="card image-card">
+                <h2>Soluciones tecnológicas a tus necesidades</h2>
+            </div>
+            <div class="card orange-card wide-card">
+                <i class="fas fa-gears card-icon"></i>
+                <h3>Soluciones personalizadas</h3>
+                <p>Si tu negocio necesita una función específica o integración particular, puedo desarrollarlo. Cada sitio resuelve problemas reales.</p>
+            </div>
+            <div class="card orange-card">
+                <i class="fas fa-comment-dots card-icon"></i>
+                <h3>Mensajería directa</h3>
+                <p>Sistemas de contacto rápido: WhatsApp, formularios o botones de consulta.</p>
+            </div>
+            <div class="card orange-card">
+                <i class="fas fa-shopping-basket card-icon"></i>
+                <h3>Tiendas online</h3>
+                <p>Vende productos de forma fácil con catálogo y carrito integrado.</p>
+            </div>
+            <div class="card plus-card">
+                <span>+</span>
+                <p>Ver más</p>
+            </div>
+        </div>
+    </section>
 
-<section class="wrap" id="proyectos">
-  <h2 class="title center">Proyectos</h2>
-  <div class="folders" id="folders">
-    <button class="folder" data-i="0"><span class="tab"></span><span class="body"><span class="thumb"><img src="Imagenes/p1.jpg" alt=""></span><span class="name"></span><span class="see">Ver proyecto</span></span></button>
-    <button class="folder" data-i="1"><span class="tab"></span><span class="body"><span class="thumb"><img src="Imagenes/p2.jpg" alt=""></span><span class="name"></span><span class="see">Ver proyecto</span></span></button>
-    <button class="folder" data-i="2"><span class="tab"></span><span class="body"><span class="thumb"><img src="Imagenes/p3.jpg" alt=""></span><span class="name"></span><span class="see">Ver proyecto</span></span></button>
-    <button class="folder plus" data-i="all"><span class="tab"></span><span class="body"><span class="plus-sign">+</span><span class="see">Ver todos</span></span></button>
-  </div>
-</section>
-
-<section class="process">
-  <h2>Proceso de trabajo</h2>
-  <ol class="steps">
-    <li><b>1</b><h3>Análisis</h3><p>Entiendo tu marca y lo que necesitás.</p><img src="Imagenes/proceso-1.png" alt=""></li>
-    <li><b>2</b><h3>Diseño</h3><p>Creo la estructura y el diseño del sitio.</p><img src="Imagenes/proceso-2.png" alt=""></li>
-    <li><b>3</b><h3>Desarrollo</h3><p>Programo el sitio optimizado para velocidad.</p><img src="Imagenes/proceso-3.png" alt=""></li>
-    <li><b>4</b><h3>Publicación</h3><p>Tu sitio queda online, listo para recibir clientes.</p><img src="Imagenes/proceso-4.png" alt=""></li>
-  </ol>
-</section>
-
-<section class="impact">
-  <h2>Tus clientes podrán ver tu negocio, productos o servicios desde cualquier lugar.</h2>
-  <div class="impact-visual">
-    <img src="Imagenes/telefono-mano.png" alt="Smartphone mostrando los servicios de un negocio" class="desktop-img">
-    <div class="carousel">
-      <div class="carousel-track" id="carouselTrack"></div>
-      <button class="car-btn prev" id="prevBtn" aria-label="Anterior"><i class="fas fa-chevron-left"></i></button>
-      <button class="car-btn next" id="nextBtn" aria-label="Siguiente"><i class="fas fa-chevron-right"></i></button>
+    <div id="servicesModal" class="modal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h2>Servicios</h2>
+                <span class="close-btn">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="service-item">
+                    <i class="fas fa-code"></i>
+                    <div class="service-info">
+                        <h4>Desarrollo web a medida</h4>
+                        <p>Sitios personalizados desde cero. Sin soluciones genéricas: cada herramienta se adapta a tu negocio.</p>
+                    </div>
+                </div>
+                <div class="service-item">
+                    <i class="fas fa-shopping-cart"></i>
+                    <div class="service-info">
+                        <h4>Tiendas online</h4>
+                        <p>Catálogo, carrito y contacto por WhatsApp para vender de forma rápida.</p>
+                    </div>
+                </div>
+                <div class="service-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <div class="service-info">
+                        <h4>Sistemas de reservas</h4>
+                        <p>Ideal para restaurantes, peluquerías, clínicas o gimnasios. Agenda turnos online fácilmente.</p>
+                    </div>
+                </div>
+                <div class="service-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div class="service-info">
+                        <h4>Páginas para negocios locales</h4>
+                        <p>Sitios profesionales para mostrar servicios, ubicación y contacto.</p>
+                    </div>
+                </div>
+                <div class="service-item">
+                    <i class="fas fa-brain"></i>
+                    <div class="service-info">
+                        <h4>Integración con IA</h4>
+                        <p>Asistentes automáticos, recomendaciones y respuestas inteligentes para el usuario.</p>
+                    </div>
+                </div>
+                <div class="service-item">
+                    <i class="fas fa-star"></i>
+                    <div class="service-info">
+                        <h4>Sistemas de reseñas</h4>
+                        <p>Secciones de opiniones para generar confianza en tus clientes potenciales.</p>
+                    </div>
+                </div>
+                <div class="service-item">
+                    <i class="fas fa-search-dollar"></i>
+                    <div class="service-info">
+                        <h4>Optimización SEO básica</h4>
+                        <p>Configuración para que tu sitio aparezca en Google cuando busquen tus servicios.</p>
+                    </div>
+                </div>
+                <div class="service-item">
+                    <i class="fas fa-share-alt"></i>
+                    <div class="service-info">
+                        <h4>Integración con redes sociales</h4>
+                        <p>Conecta tu web con Instagram o Facebook para un contenido integrado.</p>
+                    </div>
+                </div>
+                <div class="service-item">
+                    <i class="fas fa-newspaper"></i>
+                    <div class="service-info">
+                        <h4>Blogs o secciones de contenido</h4>
+                        <p>Comparte artículos y noticias para mejorar tu posicionamiento y marca.</p>
+                    </div>
+                </div>
+                <div class="service-item">
+                    <i class="fas fa-book-open"></i>
+                    <div class="service-info">
+                        <h4>Catálogos digitales</h4>
+                        <p>Para mayoristas o proveedores que quieren mostrar productos sin tienda completa.</p>
+                    </div>
+                </div>
+                <div class="service-item">
+                    <i class="fas fa-robot"></i>
+                    <div class="service-info">
+                        <h4>Automatizaciones</h4>
+                        <p>Respuestas automáticas y derivación eficiente de consultas.</p>
+                    </div>
+                </div>
+                <div class="service-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <div class="service-info">
+                        <h4>Paneles simples (dashboards)</h4>
+                        <p>Visualiza información y administra contenido con herramientas personalizadas.</p>
+                    </div>
+                </div>
+                <div class="service-item">
+                    <i class="fas fa-edit"></i>
+                    <div class="service-info">
+                        <h4>Formularios inteligentes</h4>
+                        <p>Capta consultas o presupuestos con validaciones a medida.</p>
+                    </div>
+                </div>
+                <div class="service-item">
+                    <i class="fas fa-bell"></i>
+                    <div class="service-info">
+                        <h4>Notificaciones</h4>
+                        <p>Sistemas de alertas y confirmaciones automáticas inmediatas.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
+
+  <section class="proyectos-section" id="proyectos" class="scroll-margin">
+    <h1 class="proyectos-title">Proyectos</h1>
+    <div class="proyectos-container">
+        <div class="folder">
+            <div class="folder-tab-top"></div>
+            <div class="folder-tab-wide"></div>
+            <div class="folder-body">
+                <div class="web-preview"><img src="Imagenes/p1.jpg" alt="Proyecto 1"></div>
+                <span class="label-text project-name">Cargando...</span>
+                <div class="btn-ver">Ver</div>
+            </div>
+            <div class="folder-shadow"></div>
+        </div>
+        <div class="folder">
+            <div class="folder-tab-top"></div>
+            <div class="folder-tab-wide"></div>
+            <div class="folder-body">
+                <div class="web-preview"><img src="Imagenes/p2.jpg" alt="Proyecto 2"></div>
+                <span class="label-text project-name">Cargando...</span>
+                <div class="btn-ver">Ver</div>
+            </div>
+            <div class="folder-shadow"></div>
+        </div>
+        <div class="folder">
+            <div class="folder-tab-top"></div>
+            <div class="folder-tab-wide"></div>
+            <div class="folder-body">
+                <div class="web-preview"><img src="Imagenes/p3.jpg" alt="Proyecto 3"></div>
+                <span class="label-text project-name">Cargando...</span>
+                <div class="btn-ver">Ver</div>
+            </div>
+            <div class="folder-shadow"></div>
+        </div>
+        <div class="folder folder-plus">
+            <div class="folder-tab-top"></div>
+            <div class="folder-tab-wide"></div>
+            <div class="folder-body"><span>+</span></div>
+            <div class="folder-shadow"></div>
+        </div>
+    </div>
 </section>
 
-<section class="contact" id="contacto">
-  <div class="contact-grid">
-    <div class="contact-left">
-      <form class="form-card" id="contactForm" novalidate>
-        <h2>Contactame</h2>
-        <label>Tu email<input type="email" name="email" placeholder="nombre@correo.com" required autocomplete="email"></label>
-        <label>Asunto<input type="text" name="subject" placeholder="Ej: Quiero una tienda online" required></label>
-        <label>Mensaje<textarea name="message" placeholder="Contame sobre tu proyecto" required></textarea></label>
-        <button type="submit" class="send">Enviar mensaje</button>
-      </form>
+    <div id="proyectosModal" class="modal-proyectos">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h2>Mis Proyectos</h2>
+                <span class="close-btn">&times;</span>
+            </div>
+            <div class="modal-body" id="proyectosModalBody"></div>
+        </div>
     </div>
-    <div class="contact-right">
-      <div>
-        <h2>¿Hablamos sobre tu proyecto?</h2>
-        <p>Si estás pensando en crear o mejorar tu sitio web, escribime y te ayudo.</p>
-      </div>
-      <img src="Imagenes/N-saludando.png" alt="" class="mascot">
+
+    <div class="container-proceso">
+        <h1>proceso de<br>trabajo</h1>
+        <div class="content">
+            <div class="step left">
+                <h2>Análisis</h2>
+                <p>Entiendo tu marca y lo que necesitas.</p>
+                <img src="Imagenes/proceso-1.png" alt="Análisis">
+            </div>
+            <div class="step right">
+                <h2>Diseño</h2>
+                <p>Creo la estructura y el diseño del sitio.</p>
+                <img src="Imagenes/proceso-2.png" alt="Diseño">
+            </div>
+            <div class="step left">
+                <h2>Desarrollo</h2>
+                <p>Programo el sitio optimizado para velocidad.</p>
+                <img src="Imagenes/proceso-3.png" alt="Desarrollo">
+            </div>
+            <div class="step right">
+                <h2>Publicación</h2>
+                <p>Tu sitio queda online listo para recibir clientes.</p>
+                <img src="Imagenes/proceso-4.png" alt="Publicación">
+            </div>
+        </div>
     </div>
-  </div>
+
+<section class="seccion-impacto" id="clientes">
+    <div class="columna-texto">
+        <h1>Tus clientes podrán ver tu negocio, productos o servicios desde cualquier lugar.</h1>
+    </div>
+    <div class="columna-visual">
+        <!-- Imagen para desktop (se ve SOLO en pantallas grandes) -->
+        <img src="Imagenes/telefono-mano.png" alt="Smartphone con servicios del negocio" class="desktop-image">
+        
+        <!-- Carrusel para móvil (se ve SOLO en pantallas pequeñas) -->
+        <div class="mobile-carousel">
+            <div class="carousel-container">
+                <div class="carousel-track" id="carouselTrack">
+                    <img src="Imagenes/celu1.png" alt="Celular 1" class="carousel-slide">
+                    <img src="Imagenes/celu2.png" alt="Celular 2" class="carousel-slide">
+                    <img src="Imagenes/celu3.png" alt="Celular 3" class="carousel-slide">
+                    <img src="Imagenes/celu4.png" alt="Celular 4" class="carousel-slide">
+                    <img src="Imagenes/celu5.png" alt="Celular 5" class="carousel-slide">
+                    <img src="Imagenes/celu6.png" alt="Celular 6" class="carousel-slide">
+                    <img src="Imagenes/celu7.png" alt="Celular 7" class="carousel-slide">
+                    <img src="Imagenes/celu8.png" alt="Celular 8" class="carousel-slide">
+                    <img src="Imagenes/celu9.png" alt="Celular 9" class="carousel-slide">
+                    <img src="Imagenes/celu10.png" alt="Celular 10" class="carousel-slide">
+                </div>
+            </div>
+            <button class="carousel-btn prev-btn" id="prevBtn">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="carousel-btn next-btn" id="nextBtn">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            <div class="carousel-dots" id="carouselDots"></div>
+        </div>
+    </div>
 </section>
 
-<section class="faq wrap-narrow" aria-label="Preguntas frecuentes">
-  <h2 class="title center">Preguntas frecuentes</h2>
-  <div id="faqList"></div>
-</section>
-</main>
+    <section class="ng-contact-hero-section" id="contacto">
+        <svg class="ng-contact-svg-divider" viewBox="0 0 1440 600" preserveAspectRatio="none">
+            <defs>
+                <linearGradient id="ng-grad-unique" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="50%" style="stop-color:#f16322;stop-opacity:1" />
+                    <stop offset="50%" style="stop-color:#231f20;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            <path fill="url(#ng-grad-unique)" d="M0,80 C240,0 480,0 720,80 C960,160 1200,160 1440,80 L1440,520 C1200,600 960,600 720,520 C480,440 240,440 0,520 Z"></path>
+        </svg>
+        <div class="ng-contact-grid-container">
+            <div class="ng-contact-side-left">
+                <div class="ng-contact-card-box">
+                    <h2>Contactame</h2>
+                    <form>
+                        <div class="ng-contact-input-wrapper">
+                            <input type="email" placeholder="Tu Gmail" required>
+                        </div>
+                        <div class="ng-contact-input-wrapper">
+                            <input type="text" placeholder="Asunto" required>
+                        </div>
+                        <div class="ng-contact-input-wrapper">
+                            <textarea placeholder="Contame sobre tu proyecto..."></textarea>
+                        </div>
+                        <button type="submit" class="ng-contact-submit-trigger">ENVIAR MENSAJE</button>
+                    </form>
+                </div>
+            </div>
+            <div class="ng-contact-side-right">
+                <div class="ng-contact-text-block">
+                    <h2>¿Hablamos sobre tu proyecto?</h2>
+                    <p>Si estás pensando en crear o mejorar tu sitio web, podés escribirme y te ayudo.</p>
+                </div>
+                <div class="ng-contact-mascot-area">
+                    <img src="Imagenes/N-saludando.png" alt="Mascota" class="ng-contact-mascot-img">
+                </div>
+            </div>
+        </div>
+    </section>
 
-<footer class="footer">
-  <div class="footer-grid">
-    <img src="Imagenes/logo-fondo.png" alt="Nahuel Gonzalez" class="footer-logo">
-    <div class="footer-links">
-      <a href="mailto:nahuel.gonzalez@fenixsolutions.com.ar"><i class="fa-regular fa-envelope"></i>nahuel.gonzalez@fenixsolutions.com.ar</a>
-      <a href="https://instagram.com/nahuel_gonzalez.css" target="_blank" rel="noopener"><i class="fa-brands fa-instagram"></i>@nahuel_gonzalez.css</a>
-      <a href="https://linkedin.com/in/nahuel-matiacevich" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin-in"></i>Nahuel Matiacevich</a>
-      <a href="https://github.com/nahuel-gonzalezz" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i>nahuel-gonzalezz</a>
+    <section class="faq-section">
+        <div class="faq-container">
+            <div class="faq-item">
+                <button class="faq-question"> ¿Cuánto tiempo tarda en desarrollarse un sitio web?
+                    <div class="faq-icon-container">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </button>
+                <div class="faq-answer-wrapper">
+                    <div class="faq-answer">
+                        El tiempo depende del tipo de proyecto. Un sitio simple puede estar listo en aproximadamente una o dos semanas, mientras que proyectos más completos pueden tardar un poco más según las funcionalidades necesarias.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question"> ¿Qué pasa si algo falla después de entregar el sitio?
+                    <div class="faq-icon-container">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </button>
+                <div class="faq-answer-wrapper">
+                    <div class="faq-answer">
+                        No te dejo solo. Una vez lanzado el proyecto, ofrezco un período de soporte para asegurar que todo funcione a la perfección y resolver cualquier duda técnica que pueda surgir.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question"> ¿Puedo actualizar el contenido del sitio?
+                    <div class="faq-icon-container">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </button>
+                <div class="faq-answer-wrapper">
+                    <div class="faq-answer">
+                        Sí. Dependiendo del tipo de proyecto, el sitio puede diseñarse para que puedas actualizar textos, imágenes o información fácilmente sin necesidad de tocar código.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question"> ¿Necesito tener dominio y hosting?
+                    <div class="faq-icon-container">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </button>
+                <div class="faq-answer-wrapper">
+                    <div class="faq-answer">
+                        Si aún no los tenés, puedo ayudarte a elegir y configurar el dominio y el hosting necesarios para que tu sitio web esté online de forma segura y profesional.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question"> ¿Qué información necesito para empezar un proyecto?
+                    <div class="faq-icon-container">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </button>
+                <div class="faq-answer-wrapper">
+                    <div class="faq-answer">
+                        Generalmente se necesita: 
+                        <ul class="faq-list">
+                            <li>Información sobre tu negocio o servicio.</li>
+                            <li>Textos descriptivos para las secciones.</li>
+                            <li>Imágenes propias o logotipo (si los tenés).</li>
+                            <li>Una referencia de sitios que te gusten.</li>
+                        </ul>
+                        Con eso ya podemos poner manos a la obra.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question"> ¿Puedo vender productos en mi web?
+                    <div class="faq-icon-container">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </button>
+                <div class="faq-answer-wrapper">
+                    <div class="faq-answer">
+                        Sí. Puedo integrar una tienda online completa con método de pago, gestión de stock y carrito de compras para que tu negocio venda las 24 horas.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-logo-box">
+                <img src="./Imagenes/logo-fondo.png" alt="Nahuel Gonzalez Logo">
+            </div>
+            <div class="footer-contact-list">
+                <a href="mailto:nahuel.gonzalez@fenixsolutions.com.ar" class="contact-link">
+                    <i class="fa-regular fa-envelope"></i> nahuel.gonzalez@fenixsolutions.com.ar
+                </a>
+                <a href="https://instagram.com/nahuel_gonzalez.css" target="_blank" class="contact-link">
+                    <i class="fa-brands fa-instagram"></i> @nahuel_gonzalez.css
+                </a>
+                <a href="https://linkedin.com/in/nahuel-matiacevich" target="_blank" class="contact-link">
+                    <i class="fa-brands fa-linkedin-in"></i> Nahuel Matiacevich
+                </a>
+                <a href="https://github.com/nahuel-gonzalezz" target="_blank" class="contact-link">
+                    <i class="fa-brands fa-github"></i> nahuel-gonzalezz
+                </a>
+            </div>
+            <nav class="footer-nav-menu">
+                <a href="#inicio" class="nav-link" data-target="inicio">Inicio</a>
+                <a href="#sobre-mi" class="nav-link" data-target="sobre-mi">Sobre mí</a>
+                <a href="#servicios" class="nav-link" data-target="servicios">Servicios</a>
+                <a href="#proyectos" class="nav-link" data-target="proyectos">Proyectos</a>
+                <a href="#contacto" class="nav-link" data-target="contacto">Contacto</a>
+            </nav>
+        </div>
+        <div class="footer-bottom-bar">
+            <p class="copyright-text">&copy; 2026 Nahuel Gonzalez &bull; DESARROLLO WEB</p>
+        </div>
+    </footer>
+
     </div>
-    <nav class="footer-nav" aria-label="Pie de página">
-      <a href="#inicio">Inicio</a><a href="#sobre-mi">Sobre mí</a><a href="#servicios">Servicios</a><a href="#proyectos">Proyectos</a><a href="#contacto">Contacto</a>
-    </nav>
-  </div>
-  <p class="copy">&copy; 2026 Nahuel Gonzalez. Desarrollo web.</p>
-</footer>
-
-<div class="modal" id="servicesModal" hidden>
-  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="sm-t">
-    <div class="modal-head"><h2 id="sm-t">Servicios</h2><button class="modal-x" aria-label="Cerrar">&times;</button></div>
-    <div class="modal-body" id="servicesBody"></div>
-  </div>
-</div>
-<div class="modal" id="projectsModal" hidden>
-  <div class="modal-box wide" role="dialog" aria-modal="true" aria-labelledby="pm-t">
-    <div class="modal-head"><h2 id="pm-t">Mis proyectos</h2><button class="modal-x" aria-label="Cerrar">&times;</button></div>
-    <div class="modal-body" id="projectsBody"></div>
-  </div>
-</div>
-
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
