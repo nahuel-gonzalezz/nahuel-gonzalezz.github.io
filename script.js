@@ -1,867 +1,261 @@
-// ===== se me jijean los jijolines =====
-(function() {
-    'use strict';
-    
-    // ===== FUNCIÓN PARA PRECARGAR IMÁGENES =====
-    async function preloadAllImages() {
-        return new Promise((resolve) => {
-            // Recopilar todas las imágenes del sitio
-            const allImages = [];
-            
-            // Buscar todas las etiquetas img existentes
-            const existingImages = document.querySelectorAll('img');
-            existingImages.forEach(img => {
-                if (img.src && !img.src.includes('data:image')) {
-                    allImages.push(img.src);
-                }
-            });
-            
-            // También buscar imágenes en CSS (background-images)
-            const elementsWithBg = document.querySelectorAll('[style*="background-image"]');
-            elementsWithBg.forEach(el => {
-                const bgStyle = el.style.backgroundImage;
-                const match = bgStyle.match(/url\(["']?([^"')]+)["']?\)/);
-                if (match && match[1]) {
-                    allImages.push(match[1]);
-                }
-            });
-            
-            // Eliminar duplicados
-            const uniqueImages = [...new Set(allImages)];
-            
-            console.log(`📸 Precargando ${uniqueImages.length} imágenes...`);
-            
-            if (uniqueImages.length === 0) {
-                resolve();
-                return;
-            }
-            
-            let loadedCount = 0;
-            const totalImages = uniqueImages.length;
-            
-            // Precargar cada imagen
-            uniqueImages.forEach(src => {
-                const img = new Image();
-                
-                img.onload = () => {
-                    loadedCount++;
-                    console.log(`✅ Cargada: ${src} (${loadedCount}/${totalImages})`);
-                    if (loadedCount === totalImages) {
-                        resolve();
-                    }
-                };
-                
-                img.onerror = () => {
-                    console.warn(`⚠️ No se pudo cargar: ${src}`);
-                    loadedCount++;
-                    if (loadedCount === totalImages) {
-                        resolve();
-                    }
-                };
-                
-                img.src = src;
-            });
-            
-            // Timeout de seguridad (máximo 5 segundos)
-            setTimeout(() => {
-                if (loadedCount < totalImages) {
-                    console.warn('⚠️ Timeout: Mostrando sitio después de 5 segundos');
-                    resolve();
-                }
-            }, 5000);
-        });
-    }
-    
-    // ===== DATOS DE PROYECTOS =====
-    async function loadProjectsData() {
-        return [
-            {
-                titulo: "Boedo Salud - Sitio Oficial",
-                descripcion: "Sitio web oficial para prepaga del sector salud. Plataforma moderna, responsive e intuitiva que presenta planes, beneficios, cartilla médica y contacto. Diseñada para transmitir confianza y profesionalismo, reflejando casi 20 años de trayectoria.",
-                imagen: "Imagenes/proyectos/proyecto-1.png",
-                tecnologias: ["HTML5", "CSS3", "JavaScript", "Responsive Design", "UX/UI"],
-                linkDemo: "https://www.boedosalud.com.ar/",
-            },
-            {
-                titulo: "Fenix Solutions - Sitio Corporativo",
-                descripcion: "Sitio web profesional para empresa de telecomunicaciones con más de 15 años de trayectoria. Presenta servicios tecnológicos de forma estructurada, con enfoque en generación de confianza y consultas comerciales.",
-                imagen: "Imagenes/proyectos/proyecto-2.png",
-                tecnologias: ["HTML5", "CSS3", "JavaScript", "Responsive Design", "UX/UI"],
-                linkDemo: "https://fenixsi.ar/",
-            },
-            {
-                titulo: "Clínica Boedo - CMS Personalizable",
-                descripcion: "Sistema tipo Google Sites pero exclusivo para Clínica Boedo. Permite editar contenido, secciones, novedades y servicios médicos de forma sencilla sin necesidad de conocimientos técnicos. Totalmente personalizable para que el cliente gestione su propio sitio.",
-                imagen: "Imagenes/proyectos/proyecto-3.png",
-                tecnologias: ["JavaScript", "PHP", "MySQL", "CMS Propio", "Frontend Modular"],
-            },
-            {
-                titulo: "Clínica Boedo - Sitio Oficial",
-                descripcion: "Rediseño completo del sitio web de Clínica Boedo. Transformación de sitio desactualizado a plataforma profesional con enfoque mobile-first, optimización de tiempos de carga, mejora de experiencia de usuario y organización clara de información médica y contacto.",
-                imagen: "Imagenes/proyectos/proyecto-4.png",
-                tecnologias: ["HTML5", "CSS3", "JavaScript", "PHP", "Mobile First"],
-                linkDemo: "https://www.clinicaboedo.com.ar/",
-            },
-            {
-                titulo: "Gonzagapalooza - Festival Web",
-                descripcion: "Sitio web oficial del festival con sistema de compra de entradas integrado. Incluye análisis de tráfico con Google Analytics y sistema para que familias suban fotos y videos utilizando Firebase. Sitio responsive con excelente feedback de la comunidad.",
-                imagen: "Imagenes/proyectos/proyecto-5.png",
-                tecnologias: ["Google Sites", "Firebase", "Google Analytics", "HTML5", "CSS3"],
-                linkDemo: "https://sites.google.com/view/gonzagapalooza-2024/inicio",
-                linkRepo: "#"
-            }
-        ];
-    }
-    
-    // ===== CARGAR PROYECTOS EN EL DOM =====
-    function cargarProyectosEnDOM(proyectos) {
-        const folders = document.querySelectorAll('.folder:not(.folder-plus)');
-        const primerosTres = proyectos.slice(0, 3);
-        
-        primerosTres.forEach((proyecto, index) => {
-            if (folders[index]) {
-                const folder = folders[index];
-                
-                // Actualizar imagen
-                const img = folder.querySelector('.web-preview img');
-                if (img) {
-                    img.src = proyecto.imagen;
-                    img.alt = proyecto.titulo;
-                }
-                
-                // Actualizar nombre del proyecto
-                const label = folder.querySelector('.label-text');
-                if (label) {
-                    label.textContent = proyecto.titulo;
-                }
-                
-                // Guardar datos completos
-                folder.dataset.proyecto = JSON.stringify(proyecto);
-                folder.dataset.proyectoIndex = index;
-            }
-        });
-        
-        console.log('✅ Proyectos cargados en DOM:', primerosTres.map(p => p.titulo));
-    }
-    
-    // ===== MENÚ HAMBURGUESA =====
-    function initMenuHamburguesa() {
-        const menuToggle = document.getElementById('menuToggle');
-        const menuClose = document.getElementById('menuClose');
-        const navMenu = document.getElementById('navMenu');
-        const menuOverlay = document.getElementById('menuOverlay');
-        
-        if (!menuToggle || !navMenu) return;
-        
-        function openMenu() {
-            navMenu.classList.add('active');
-            if (menuOverlay) menuOverlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-        
-        function closeMenu() {
-            navMenu.classList.remove('active');
-            if (menuOverlay) menuOverlay.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-        
-        menuToggle.addEventListener('click', openMenu);
-        if (menuClose) menuClose.addEventListener('click', closeMenu);
-        if (menuOverlay) menuOverlay.addEventListener('click', closeMenu);
-        
-        window.addEventListener('resize', function() {
-            if (window.innerWidth > 768 && navMenu.classList.contains('active')) {
-                closeMenu();
-            }
-        });
-    }
-    
-    // ===== SCROLL SUAVE =====
-    function initScrollSuave() {
-        const navLinks = document.querySelectorAll('.nav-link');
-        const navMenu = document.getElementById('navMenu');
-        const menuOverlay = document.getElementById('menuOverlay');
-        
-        navLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                const targetId = this.getAttribute('data-target');
-                if (!targetId) return;
-                
-                const targetElement = document.getElementById(targetId);
-                if (targetElement) {
-                    let offset = targetId === 'contacto' ? -300 : 100;
-                    const elementPosition = targetElement.getBoundingClientRect().top;
-                    const offsetPosition = elementPosition + window.pageYOffset - offset;
-                    
-                    window.scrollTo({
-                        top: offsetPosition,
-                        behavior: 'smooth'
-                    });
-                    
-                    if (navMenu && navMenu.classList.contains('active')) {
-                        navMenu.classList.remove('active');
-                        if (menuOverlay) menuOverlay.classList.remove('active');
-                        document.body.style.overflow = '';
-                    }
-                }
-            });
-        });
-    }
-    
-    // ===== SOBRE MÍ =====
-    function initSobreMi() {
-        const bubbles = document.querySelectorAll('.info-bubble');
-        const panel = document.getElementById('text-display-panel');
-        const displayText = document.getElementById('display-text');
-        const closeBtn = document.getElementById('close-panel');
-        
-        const mensajes = {
-            quien: "<div style='display: flex; align-items: center; gap: 10px; margin-bottom: 15px;'><i class='fas fa-user' style='font-size: 2rem; color: #f16322;'></i><strong style='font-size: 1.5rem; color: #f16322;'>¿Quién soy?</strong></div><p style='font-size: 1rem; line-height: 1.6;'>Soy Nahuel, desarrollador web apasionado por crear soluciones digitales. Me especializo en ayudar a emprendedores y pequeñas empresas a tener presencia online efectiva.</p>",
-            
-            como: "<div style='display: flex; align-items: center; gap: 10px; margin-bottom: 15px;'><i class='fas fa-cogs' style='font-size: 2rem; color: #f16322;'></i><strong style='font-size: 1.5rem; color: #f16322;'>¿Cómo trabajo?</strong></div><p style='font-size: 1rem; line-height: 1.6;'>Trabajo de forma cercana y colaborativa, escuchando tus necesidades y traduciéndolas en soluciones digitales. Me adapto a tus tiempos y presupuesto.</p>",
-            
-            que: "<div style='display: flex; align-items: center; gap: 10px; margin-bottom: 15px;'><i class='fas fa-laptop-code' style='font-size: 2rem; color: #f16322;'></i><strong style='font-size: 1.5rem; color: #f16322;'>¿Qué hago?</strong></div><p style='font-size: 1rem; line-height: 1.6;'>Desarrollo sitios web personalizados, landing pages, tiendas online y sistemas a medida. Cada proyecto es único y diseñado para cumplir objetivos específicos.</p>",
-            
-            enfoque: "<div style='display: flex; align-items: center; gap: 10px; margin-bottom: 15px;'><i class='fas fa-bullseye' style='font-size: 2rem; color: #f16322;'></i><strong style='font-size: 1.5rem; color: #f16322;'>Mi enfoque</strong></div><p style='font-size: 1rem; line-height: 1.6;'>No uso plantillas genéricas. Analizo cada proyecto, diseño pensando en el usuario final y desarrollo con código limpio y optimizado.</p>",
-            
-            objetivo: "<div style='display: flex; align-items: center; gap: 10px; margin-bottom: 15px;'><i class='fas fa-rocket' style='font-size: 2rem; color: #f16322;'></i><strong style='font-size: 1.5rem; color: #f16322;'>Mi objetivo</strong></div><p style='font-size: 1rem; line-height: 1.6;'>Ayudar a emprendedores y negocios a tener presencia online profesional que realmente funcione y ayude a hacer crecer su proyecto.</p>"
-        };
-        
-        if (!bubbles.length || !panel || !displayText) return;
-        
-        bubbles.forEach(bubble => {
-            bubble.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const key = this.getAttribute('data-key');
-                
-                if (key && mensajes[key]) {
-                    displayText.innerHTML = mensajes[key];
-                    
-                    const rect = this.getBoundingClientRect();
-                    let left = rect.left;
-                    const panelWidth = 350;
-                    
-                    if (left + panelWidth > window.innerWidth - 20) {
-                        left = window.innerWidth - panelWidth - 20;
-                    }
-                    if (left < 20) left = 20;
-                    
-                    panel.style.position = 'fixed';
-                    panel.style.top = (rect.bottom + 10) + 'px';
-                    panel.style.left = left + 'px';
-                    panel.style.display = 'block';
-                    panel.classList.add('active');
-                }
-            });
-        });
-        
-        if (closeBtn) {
-            closeBtn.addEventListener('click', function() {
-                panel.classList.remove('active');
-                panel.style.display = 'none';
-            });
-        }
-        
-        document.addEventListener('click', function(e) {
-            if (panel.classList.contains('active') && 
-                !panel.contains(e.target) && 
-                !e.target.closest('.info-bubble')) {
-                panel.classList.remove('active');
-                panel.style.display = 'none';
-            }
-        });
-    }
-    
-    // ===== MODAL SERVICIOS =====
-    function initModalServicios() {
-        const plusCard = document.querySelector('.plus-card');
-        const servicesModal = document.getElementById('servicesModal');
-        const closeServicesBtn = servicesModal?.querySelector('.close-btn');
-        
-        if (!plusCard || !servicesModal) return;
-        
-        function openModal() {
-            servicesModal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }
-        
-        function closeModal() {
-            servicesModal.style.display = 'none';
-            document.body.style.overflow = '';
-        }
-        
-        plusCard.addEventListener('click', openModal);
-        if (closeServicesBtn) closeServicesBtn.addEventListener('click', closeModal);
-        
-        servicesModal.addEventListener('click', function(e) {
-            if (e.target === servicesModal) closeModal();
-        });
-    }
-    
-    // ===== MODAL PROYECTOS =====
-    function initModalProyectos(proyectos) {
-        const folders = document.querySelectorAll('.folder');
-        const proyectosModal = document.getElementById('proyectosModal');
-        const proyectosModalBody = document.getElementById('proyectosModalBody');
-        const closeProyectosBtn = proyectosModal?.querySelector('.close-btn');
-        
-        if (!proyectosModal || !proyectosModalBody) return;
-        
-        function abrirModal(tipo) {
-            proyectosModalBody.innerHTML = '';
-            
-            let proyectosAMostrar = tipo === 'todos' ? proyectos : [proyectos[parseInt(tipo)]];
-            
-            proyectosAMostrar.forEach(p => {
-                const techs = p.tecnologias.map(t => `<span class="tecnologia-tag" style="display:inline-block; background:#f16322; color:white; padding:4px 10px; border-radius:20px; font-size:0.8rem; margin:4px;">${t}</span>`).join('');
-                
-const html = `
-    <div class="proyecto-item" style="margin-bottom:30px; padding:20px; border-bottom:1px solid #eee;">
-        <div class="proyecto-imagen" style="margin-bottom:15px;">
-            <img src="${p.imagen}" alt="${p.titulo}" loading="lazy" style="width:100%; border-radius:10px;">
-        </div>
-        <div class="proyecto-info">
-            <h3 style="color:#f16322; margin-bottom:10px;">${p.titulo}</h3>
-            <p style="margin-bottom:15px;">${p.descripcion}</p>
-            <div class="proyecto-tecnologias" style="margin-bottom:15px;">${techs}</div>
-            <div class="proyecto-links">
-                <a href="${p.linkDemo}" target="_blank" style="display:inline-block; background:#f16322; color:white; padding:8px 16px; border-radius:5px; text-decoration:none;"><i class="fas fa-external-link-alt"></i> Visitar Web</a>
-            </div>
-        </div>
-    </div>
-`;
-                
-                proyectosModalBody.innerHTML += html;
-            });
-            
-            proyectosModal.classList.add('active');
-            proyectosModal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
-        
-        function cerrarModal() {
-            proyectosModal.classList.remove('active');
-            proyectosModal.style.display = 'none';
-            document.body.style.overflow = '';
-        }
-        
-        folders.forEach((folder, index) => {
-            folder.addEventListener('click', function(e) {
-                e.stopPropagation();
-                if (folder.classList.contains('folder-plus')) {
-                    abrirModal('todos');
-                } else if (folder.dataset.proyectoIndex !== undefined) {
-                    abrirModal(folder.dataset.proyectoIndex);
-                }
-            });
-        });
-        
-        if (closeProyectosBtn) closeProyectosBtn.addEventListener('click', cerrarModal);
-        
-        proyectosModal.addEventListener('click', function(e) {
-            if (e.target === proyectosModal) cerrarModal();
-        });
-    }
-    
-    // ===== FAQ =====
-    function initFaq() {
-        const faqItems = document.querySelectorAll('.faq-item');
-        
-        faqItems.forEach(item => {
-            const question = item.querySelector('.faq-question');
-            if (question) {
-                question.addEventListener('click', function() {
-                    faqItems.forEach(other => {
-                        if (other !== item) other.classList.remove('active');
-                    });
-                    item.classList.toggle('active');
-                });
-            }
-        });
-    }
-    
-    // ===== FORMULARIO DE CONTACTO =====
-    function initContactForm() {
-        const contactForm = document.querySelector('.ng-contact-card-box form');
-        
-        if (!contactForm) {
-            console.log('❌ Formulario no encontrado');
-            return;
-        }
-        
-        console.log('✅ Formulario encontrado, configurando...');
-        
-        const SERVICE_ID = "service_j0r3k2h";
-        const TEMPLATE_ID = "TU_TEMPLATE_ID_AQUI";
-        
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const emailInput = this.querySelector('input[type="email"]');
-            const subjectInput = this.querySelector('input[type="text"]');
-            const messageTextarea = this.querySelector('textarea');
-            
-            if (!emailInput || !subjectInput || !messageTextarea) {
-                mostrarNotificacion('Error en el formulario', 'error');
-                return;
-            }
-            
-            const email = emailInput.value;
-            const asunto = subjectInput.value;
-            const mensaje = messageTextarea.value;
-            
-            if (!email || !asunto || !mensaje) {
-                mostrarNotificacion('Por favor, completa todos los campos', 'error');
-                return;
-            }
-            
-            const submitBtn = this.querySelector('button[type="submit"]');
-            const btnText = submitBtn.textContent;
-            submitBtn.textContent = 'Enviando...';
-            submitBtn.disabled = true;
-            
-            const templateParams = {
-                from_name: email.split('@')[0],
-                from_email: email,
-                subject: asunto,
-                message: mensaje,
-                to_name: 'Nahuel'
-            };
-            
-            console.log('📤 Enviando email...', templateParams);
-            
-            if (typeof emailjs === 'undefined') {
-                console.error('❌ EmailJS no está disponible');
-                mostrarNotificacion('Error: EmailJS no está cargado', 'error');
-                submitBtn.textContent = btnText;
-                submitBtn.disabled = false;
-                return;
-            }
-            
-            emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams)
-                .then(function(response) {
-                    console.log('✅ Email enviado:', response);
-                    mostrarNotificacion('¡Mensaje enviado con éxito! Te responderé a la brevedad', 'success');
-                    contactForm.reset();
-                })
-                .catch(function(error) {
-                    console.error('❌ Error detallado:', error);
-                    
-                    let mensajeError = 'Hubo un error al enviar. ';
-                    
-                    if (error.text === 'Missing public key') {
-                        mensajeError += 'Falta configurar la Public Key. Revisa emailjs.init()';
-                    } else if (error.text && error.text.includes('service')) {
-                        mensajeError += 'Service ID incorrecto.';
-                    } else if (error.text && error.text.includes('template')) {
-                        mensajeError += 'Template ID incorrecto.';
-                    } else {
-                        mensajeError += 'Podés escribirme directamente a nahuel.gonzalez@fenixsolutions.com.ar';
-                    }
-                    
-                    mostrarNotificacion(mensajeError, 'error');
-                })
-                .finally(function() {
-                    submitBtn.textContent = btnText;
-                    submitBtn.disabled = false;
-                });
-        });
-    }
-    
-    // ===== NOTIFICACIÓN =====
-    function mostrarNotificacion(mensaje, tipo) {
-        const notificacionesPrevias = document.querySelectorAll('.notificacion');
-        notificacionesPrevias.forEach(n => n.remove());
-        
-        const notificacion = document.createElement('div');
-        notificacion.className = `notificacion notificacion-${tipo}`;
-        
-        const icono = tipo === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
-        
-        notificacion.innerHTML = `
-            <div class="notificacion-contenido">
-                <i class="fas ${icono}"></i>
-                <p>${mensaje}</p>
-            </div>
-        `;
-        
-        notificacion.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: ${tipo === 'success' ? '#4CAF50' : '#f44336'};
-            color: white;
-            padding: 15px 25px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            z-index: 10001;
-            animation: slideIn 0.3s ease;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        `;
-        
-        document.body.appendChild(notificacion);
-        
-        setTimeout(() => {
-            notificacion.style.animation = 'slideOut 0.3s ease';
-            setTimeout(() => notificacion.remove(), 300);
-        }, 5000);
-    }
-    
-    // ===== CARRUSEL DE CELULARES (INFINITO) =====
-    function initPhonesCarousel() {
-        const groups = document.querySelectorAll('.scroll-group');
-        
-        if (!groups.length) {
-            console.log('No se encontraron grupos de celulares');
-            return;
-        }
-        
-        console.log('Iniciando carrusel de celulares infinito...');
-        
-        groups.forEach((group, groupIndex) => {
-            const images = Array.from(group.children);
-            
-            if (images.length) {
-                let imageHeights = [];
-                let totalHeight = 0;
-                
-                images.forEach(img => {
-                    const height = img.offsetHeight + 40;
-                    imageHeights.push(height);
-                    totalHeight += height;
-                });
-                
-                group.dataset.totalHeight = totalHeight;
-                group.dataset.imageHeights = JSON.stringify(imageHeights);
-                
-                for (let cloneCount = 0; cloneCount < 8; cloneCount++) {
-                    images.forEach(img => {
-                        const clone = img.cloneNode(true);
-                        clone.classList.add('phone-clone');
-                        group.appendChild(clone);
-                    });
-                }
-                
-                if (groupIndex === 0) {
-                    group.style.transform = `translateY(-${totalHeight * 2}px)`;
-                } else {
-                    group.style.transform = `translateY(${totalHeight * 2}px)`;
-                }
-            }
-        });
-        
-        let scrollPositions = [0, 0];
-        let speeds = [0.2, -0.2];
-        let animationFrame;
-        let totalHeights = [];
-        
-        groups.forEach((group, index) => {
-            totalHeights[index] = parseFloat(group.dataset.totalHeight) || 1000;
-        });
-        
-        function animatePhones() {
-            groups.forEach((group, index) => {
-                const contentHeight = totalHeights[index];
-                
-                scrollPositions[index] += speeds[index];
-                
-                if (index === 0) {
-                    if (scrollPositions[index] > 0) {
-                        scrollPositions[index] = -contentHeight * 7;
-                    }
-                } else {
-                    if (scrollPositions[index] < -contentHeight * 8) {
-                        scrollPositions[index] = 0;
-                    }
-                }
-                
-                group.style.transform = `translateY(${scrollPositions[index]}px)`;
-            });
-            
-            animationFrame = requestAnimationFrame(animatePhones);
-        }
-        
-        const phonesContainer = document.querySelector('.phones-container');
-        if (phonesContainer) {
-            phonesContainer.addEventListener('mouseenter', () => {
-                speeds = [0, 0];
-            });
-            
-            phonesContainer.addEventListener('mouseleave', () => {
-                speeds = [0.2, -0.2];
-            });
-        }
-        
-        setTimeout(() => {
-            animatePhones();
-        }, 100);
-        
-        window.addEventListener('resize', () => {
-            groups.forEach((group, index) => {
-                const images = Array.from(group.children).filter(img => !img.classList.contains('phone-clone'));
-                let newTotal = 0;
-                images.forEach(img => {
-                    newTotal += img.offsetHeight + 40;
-                });
-                totalHeights[index] = newTotal;
-            });
-        });
-        
-        window.addEventListener('beforeunload', () => {
-            if (animationFrame) {
-                cancelAnimationFrame(animationFrame);
-            }
-        });
-    }
-    
-    // ===== CARRUSEL MÓVIL =====
-    function initMobileCarousel() {
-        console.log('Iniciando carrusel móvil...');
-        
-        const track = document.getElementById('carouselTrack');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        const dotsContainer = document.getElementById('carouselDots');
-        
-        if (!track) {
-            console.log('No se encontró el carrusel móvil');
-            return;
-        }
-        
-        console.log('Carrusel móvil encontrado, inicializando...');
-        
-        const slides = Array.from(track.children);
-        const totalSlides = slides.length;
-        let currentIndex = 0;
-        let isTransitioning = false;
-        
-        slides.forEach(slide => {
-            slide.style.flex = '0 0 100%';
-            slide.style.width = '100%';
-            slide.style.height = '100%';
-            slide.style.objectFit = 'contain';
-            slide.style.objectPosition = 'center';
-        });
-        
-        if (dotsContainer) {
-            dotsContainer.innerHTML = '';
-            
-            for (let i = 0; i < totalSlides; i++) {
-                const dot = document.createElement('span');
-                dot.classList.add('dot');
-                if (i === 0) dot.classList.add('active');
-                dot.dataset.index = i;
-                dot.addEventListener('click', () => {
-                    if (!isTransitioning) {
-                        goToSlide(i);
-                    }
-                });
-                dotsContainer.appendChild(dot);
-            }
-        }
-        
-        const dots = document.querySelectorAll('.dot');
-        
-        function updateCarousel() {
-            if (isTransitioning) return;
-            
-            isTransitioning = true;
-            track.style.transform = `translateX(-${currentIndex * 100}%)`;
-            
-            dots.forEach((dot, index) => {
-                dot.classList.toggle('active', index === currentIndex);
-            });
-            
-            setTimeout(() => {
-                isTransitioning = false;
-            }, 400);
-        }
-        
-        function goToSlide(index) {
-            if (isTransitioning) return;
-            
-            if (index < 0) index = totalSlides - 1;
-            if (index >= totalSlides) index = 0;
-            
-            currentIndex = index;
-            updateCarousel();
-        }
-        
-        if (prevBtn) {
-            prevBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                goToSlide(currentIndex - 1);
-            });
-        }
-        
-        if (nextBtn) {
-            nextBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                goToSlide(currentIndex + 1);
-            });
-        }
-        
-        let touchStartX = 0;
-        let touchEndX = 0;
-        
-        track.addEventListener('touchstart', (e) => {
-            touchStartX = e.touches[0].clientX;
-        }, { passive: true });
-        
-        track.addEventListener('touchend', (e) => {
-            touchEndX = e.changedTouches[0].clientX;
-            const diff = touchStartX - touchEndX;
-            
-            if (Math.abs(diff) > 50) {
-                if (diff > 0) {
-                    goToSlide(currentIndex + 1);
-                } else {
-                    goToSlide(currentIndex - 1);
-                }
-            }
-        }, { passive: true });
-        
-        let autoplayInterval;
-        
-        function startAutoplay() {
-            if (autoplayInterval) clearInterval(autoplayInterval);
-            autoplayInterval = setInterval(() => {
-                if (!isTransitioning) {
-                    goToSlide(currentIndex + 1);
-                }
-            }, 4000);
-        }
-        
-        function stopAutoplay() {
-            clearInterval(autoplayInterval);
-        }
-        
-        const carousel = document.querySelector('.mobile-carousel');
-        if (carousel) {
-            carousel.addEventListener('mouseenter', stopAutoplay);
-            carousel.addEventListener('mouseleave', startAutoplay);
-            carousel.addEventListener('touchstart', stopAutoplay);
-            carousel.addEventListener('touchend', startAutoplay);
-            
-            startAutoplay();
-        }
-        
-        console.log('✅ Carrusel móvil inicializado correctamente');
-    }
-    
-    // ===== FUNCIÓN PRINCIPAL DE INICIALIZACIÓN =====
-    async function inicializarSitio() {
-        console.log('🚀 Iniciando carga del sitio...');
-        
-        // Bloquear scroll mientras carga
-        document.body.classList.add('loading');
-        
-        try {
-            // 1. Cargar datos de proyectos
-            const proyectosData = await loadProjectsData();
-            
-            // 2. Cargar proyectos en el DOM
-            cargarProyectosEnDOM(proyectosData);
-            
-            // 3. Precargar TODAS las imágenes
-            await preloadAllImages();
-            
-            // 4. Activar el efecto de deslizamiento hacia abajo
-            const loaderScreen = document.getElementById('loaderScreen');
-            const mainContent = document.getElementById('mainContent');
-            
-            if (loaderScreen) {
-                // Pequeño delay para dar sensación de completado
-                setTimeout(() => {
-                    loaderScreen.classList.add('slide-down');
-                    
-                    // Mostrar contenido
-                    if (mainContent) {
-                        mainContent.classList.add('loaded');
-                    }
-                    
-                    // Desbloquear scroll
-                    document.body.classList.remove('loading');
-                    
-                    // Eliminar la pantalla de carga después de la animación
-                    setTimeout(() => {
-                        loaderScreen.style.display = 'none';
-                    }, 800);
-                }, 300);
-            }
-            
-            console.log('✅ Sitio completamente cargado');
-            
-            // 5. Inicializar todos los módulos después de cargar
-            setTimeout(() => {
-                inicializarModulos(proyectosData);
-            }, 500);
-            
-        } catch (error) {
-            console.error('❌ Error en la carga:', error);
-            // Mostrar el sitio aunque haya error
-            const loaderScreen = document.getElementById('loaderScreen');
-            const mainContent = document.getElementById('mainContent');
-            
-            if (loaderScreen) {
-                loaderScreen.classList.add('slide-down');
-                if (mainContent) mainContent.classList.add('loaded');
-                document.body.classList.remove('loading');
-                setTimeout(() => {
-                    loaderScreen.style.display = 'none';
-                }, 800);
-            }
-            
-            inicializarModulos([]);
-        }
-    }
-    
-    // ===== INICIALIZAR TODOS LOS MÓDULOS =====
-    function inicializarModulos(proyectos) {
-        console.log('🔧 Inicializando módulos...');
-        
-        // Inicializar EmailJS
-        if (typeof emailjs !== 'undefined') {
-            emailjs.init("TU_PUBLIC_KEY_AQUI");
-            console.log('✅ EmailJS inicializado');
-        }
-        
-        // Inicializar todos los módulos
-        initMenuHamburguesa();
-        initScrollSuave();
-        initSobreMi();
-        initModalServicios();
-        initModalProyectos(proyectos);
-        initFaq();
-        initContactForm();
-        initPhonesCarousel();
-        initMobileCarousel();
-        
-        console.log('✅ Todos los módulos inicializados');
-    }
-    
-    // Agregar estilos para las animaciones de notificación
-    const styles = document.createElement('style');
-    styles.textContent = `
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        @keyframes slideOut {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(100%); opacity: 0; }
-        }
-        body.loading {
-            overflow: hidden;
-        }
-    `;
-    document.head.appendChild(styles);
-    
-    // Iniciar todo cuando el DOM esté listo
-    document.addEventListener('DOMContentLoaded', function() {
-        inicializarSitio();
+(() => {
+'use strict';
+const $ = (s, c = document) => c.querySelector(s);
+const $$ = (s, c = document) => [...c.querySelectorAll(s)];
+
+/* ===== CONFIGURACIÓN: completá estos datos ===== */
+const EMAILJS = { service: 'service_j0r3k2h', template: 'TU_TEMPLATE_ID_AQUI', key: 'TU_PUBLIC_KEY_AQUI' };
+const MAIL = 'nahuel.gonzalez@fenixsolutions.com.ar';
+
+/* ===== DATOS ===== */
+const about = {
+  quien: ['fa-user', '¿Quién soy?', 'Soy Nahuel, desarrollador web apasionado por crear soluciones digitales. Ayudo a emprendedores y pequeñas empresas a tener presencia online efectiva.'],
+  como: ['fa-cogs', '¿Cómo trabajo?', 'De forma cercana y colaborativa: escucho tus necesidades y las traduzco en soluciones digitales. Me adapto a tus tiempos y presupuesto.'],
+  que: ['fa-laptop-code', '¿Qué hago?', 'Desarrollo sitios web personalizados, landing pages, tiendas online y sistemas a medida. Cada proyecto es único y cumple objetivos específicos.'],
+  enfoque: ['fa-bullseye', 'Mi enfoque', 'No uso plantillas genéricas. Analizo cada proyecto, diseño pensando en el usuario final y desarrollo con código limpio y optimizado.'],
+  objetivo: ['fa-rocket', 'Mi objetivo', 'Ayudar a emprendedores y negocios a tener una presencia online profesional que funcione y haga crecer su proyecto.']
+};
+
+const services = [
+  ['fa-code', 'Desarrollo web a medida', 'Sitios personalizados desde cero, adaptados a tu negocio.'],
+  ['fa-shopping-cart', 'Tiendas online', 'Catálogo, carrito y contacto por WhatsApp para vender rápido.'],
+  ['fa-calendar-alt', 'Sistemas de reservas', 'Para restaurantes, peluquerías, clínicas o gimnasios: turnos online.'],
+  ['fa-map-marker-alt', 'Páginas para negocios locales', 'Mostrá servicios, ubicación y contacto de forma profesional.'],
+  ['fa-brain', 'Integración con IA', 'Asistentes automáticos, recomendaciones y respuestas inteligentes.'],
+  ['fa-star', 'Sistemas de reseñas', 'Opiniones de clientes para generar confianza.'],
+  ['fa-search-dollar', 'SEO básico', 'Configuración para que tu sitio aparezca en Google.'],
+  ['fa-share-alt', 'Redes sociales', 'Conectá tu web con Instagram o Facebook.'],
+  ['fa-newspaper', 'Blogs y secciones de contenido', 'Compartí artículos y noticias para mejorar tu posicionamiento.'],
+  ['fa-book-open', 'Catálogos digitales', 'Para mayoristas o proveedores que quieren mostrar productos sin tienda completa.'],
+  ['fa-robot', 'Automatizaciones', 'Respuestas automáticas y derivación eficiente de consultas.'],
+  ['fa-chart-bar', 'Paneles simples', 'Visualizá información y administrá contenido con herramientas a medida.'],
+  ['fa-edit', 'Formularios inteligentes', 'Captá consultas o presupuestos con validaciones a medida.'],
+  ['fa-bell', 'Notificaciones', 'Alertas y confirmaciones automáticas inmediatas.']
+];
+
+const projects = [
+  { titulo: 'Boedo Salud - Sitio oficial', imagen: 'Imagenes/proyectos/proyecto-1.png', link: 'https://www.boedosalud.com.ar/',
+    descripcion: 'Sitio oficial de una prepaga del sector salud. Plataforma moderna, responsive e intuitiva con planes, beneficios, cartilla médica y contacto. Transmite confianza y profesionalismo, reflejando casi 20 años de trayectoria.',
+    tecnologias: ['HTML5', 'CSS3', 'JavaScript', 'Responsive', 'UX/UI'] },
+  { titulo: 'Fenix Solutions - Sitio corporativo', imagen: 'Imagenes/proyectos/proyecto-2.png', link: 'https://fenixsi.ar/',
+    descripcion: 'Sitio profesional para una empresa de telecomunicaciones con más de 15 años de trayectoria. Presenta los servicios de forma estructurada, enfocado en generar confianza y consultas comerciales.',
+    tecnologias: ['HTML5', 'CSS3', 'JavaScript', 'Responsive', 'UX/UI'] },
+  { titulo: 'Clínica Boedo - CMS personalizable', imagen: 'Imagenes/proyectos/proyecto-3.png',
+    descripcion: 'Sistema tipo Google Sites exclusivo para Clínica Boedo. Permite editar contenido, secciones, novedades y servicios médicos sin conocimientos técnicos, para que el cliente gestione su propio sitio.',
+    tecnologias: ['JavaScript', 'PHP', 'MySQL', 'CMS propio'] },
+  { titulo: 'Clínica Boedo - Sitio oficial', imagen: 'Imagenes/proyectos/proyecto-4.png', link: 'https://www.clinicaboedo.com.ar/',
+    descripcion: 'Rediseño completo: de un sitio desactualizado a una plataforma profesional mobile-first, con mejores tiempos de carga, mejor experiencia de usuario e información médica y de contacto bien organizada.',
+    tecnologias: ['HTML5', 'CSS3', 'JavaScript', 'PHP', 'Mobile first'] },
+  { titulo: 'Gonzagapalooza - Festival web', imagen: 'Imagenes/proyectos/proyecto-5.png', link: 'https://sites.google.com/view/gonzagapalooza-2024/inicio',
+    descripcion: 'Sitio oficial del festival con compra de entradas integrada, análisis de tráfico con Google Analytics y un sistema para que las familias suban fotos y videos con Firebase. Excelente feedback de la comunidad.',
+    tecnologias: ['Google Sites', 'Firebase', 'Google Analytics', 'HTML5', 'CSS3'] }
+];
+
+const faqs = [
+  ['¿Cuánto tiempo tarda en desarrollarse un sitio web?', 'Depende del proyecto. Un sitio simple puede estar listo en una o dos semanas; los más completos pueden tardar un poco más según las funcionalidades.'],
+  ['¿Qué pasa si algo falla después de entregar el sitio?', 'No te dejo solo. Una vez lanzado el proyecto ofrezco un período de soporte para que todo funcione bien y resolver cualquier duda técnica.'],
+  ['¿Puedo actualizar el contenido del sitio?', 'Sí. Según el proyecto, el sitio puede diseñarse para que cambies textos, imágenes o información fácilmente, sin tocar código.'],
+  ['¿Necesito tener dominio y hosting?', 'Si todavía no los tenés, te ayudo a elegir y configurar el dominio y el hosting para que tu sitio esté online de forma segura.'],
+  ['¿Qué información necesito para empezar un proyecto?', 'Generalmente se necesita:<ul><li>Información sobre tu negocio o servicio.</li><li>Textos descriptivos para las secciones.</li><li>Imágenes propias o logotipo, si los tenés.</li><li>Referencias de sitios que te gusten.</li></ul>Con eso ya podemos empezar.'],
+  ['¿Puedo vender productos en mi web?', 'Sí. Puedo integrar una tienda online con método de pago, gestión de stock y carrito para que tu negocio venda las 24 horas.']
+];
+
+/* ===== UTILIDADES ===== */
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const phone = n => `Imagenes/celu${n}.png`;
+
+function toast(msg, type) {
+  $('.toast')?.remove();
+  const t = Object.assign(document.createElement('div'), { className: `toast ${type}`, textContent: msg });
+  t.setAttribute('role', 'status');
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 5000);
+}
+
+/* ===== CARGA ===== */
+function initLoader() {
+  const out = () => {
+    const l = $('#loader');
+    l.classList.add('out');
+    document.body.classList.remove('loading');
+    setTimeout(() => l.remove(), 900);
+  };
+  let done = false;
+  const finish = () => { if (!done) { done = true; setTimeout(out, 250); } };
+  if (document.readyState === 'complete') finish();
+  else window.addEventListener('load', finish);
+  setTimeout(finish, 4000); // tope de seguridad
+}
+
+/* ===== MENÚ ===== */
+function initMenu() {
+  const btn = $('#menuBtn'), nav = $('#nav'), ov = $('#overlay');
+  const set = open => {
+    nav.classList.toggle('open', open);
+    ov.classList.toggle('open', open);
+    btn.setAttribute('aria-expanded', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  };
+  btn.addEventListener('click', () => set(!nav.classList.contains('open')));
+  ov.addEventListener('click', () => set(false));
+  $$('a', nav).forEach(a => a.addEventListener('click', () => set(false)));
+  addEventListener('resize', () => innerWidth > 768 && set(false));
+
+  // Resalta la sección activa
+  const links = $$('a', nav);
+  const io = new IntersectionObserver(entries => entries.forEach(e => {
+    if (e.isIntersecting) links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
+  }), { rootMargin: '-40% 0px -55% 0px' });
+  ['inicio', 'sobre-mi', 'servicios', 'proyectos', 'contacto'].forEach(id => { const el = document.getElementById(id); el && io.observe(el); });
+}
+
+/* ===== HERO: teléfonos y tecnologías (loop infinito en CSS) ===== */
+function initMarquees() {
+  $$('.scroll-group').forEach(g => {
+    const from = +g.dataset.from;
+    g.innerHTML = Array.from({ length: 5 }, (_, i) => `<img src="${phone(from + i)}" alt="">`).join('');
+    g.innerHTML += g.innerHTML;
+  });
+  const t = $('#techTrack');
+  t.innerHTML += t.innerHTML;
+  $$('div', t).slice(10).forEach(d => d.setAttribute('aria-hidden', 'true'));
+}
+
+/* ===== SOBRE MÍ ===== */
+function initAbout() {
+  const panel = $('#aboutPanel'), text = $('#aboutText');
+  const close = () => { panel.hidden = true; $$('.info-bubble').forEach(b => b.classList.remove('on')); };
+  $$('.info-bubble').forEach(b => b.addEventListener('click', e => {
+    e.stopPropagation();
+    const [icon, title, body] = about[b.dataset.key];
+    text.innerHTML = `<h3><i class="fas ${icon}"></i>${title}</h3><p>${body}</p>`;
+    $$('.info-bubble').forEach(x => x.classList.toggle('on', x === b));
+    panel.hidden = false;
+  }));
+  $('#panelClose').addEventListener('click', close);
+  document.addEventListener('click', e => { if (!panel.hidden && !panel.contains(e.target)) close(); });
+  document.addEventListener('keydown', e => e.key === 'Escape' && close());
+}
+
+/* ===== MODALES ===== */
+function openModal(m) {
+  m.hidden = false;
+  document.body.style.overflow = 'hidden';
+  $('.modal-x', m).focus();
+}
+function closeModal(m) {
+  m.hidden = true;
+  document.body.style.overflow = '';
+}
+function initModals() {
+  $$('.modal').forEach(m => {
+    $('.modal-x', m).addEventListener('click', () => closeModal(m));
+    m.addEventListener('click', e => e.target === m && closeModal(m));
+  });
+  document.addEventListener('keydown', e => e.key === 'Escape' && $$('.modal').forEach(m => !m.hidden && closeModal(m)));
+
+  // Servicios
+  const sm = $('#servicesModal');
+  $('#servicesBody').innerHTML = services.map(([i, t, d]) =>
+    `<div class="svc"><i class="fas ${i}"></i><div><h4>${t}</h4><p>${d}</p></div></div>`).join('');
+  $('#servicesMore').addEventListener('click', () => openModal(sm));
+
+  // Proyectos
+  const pm = $('#projectsModal');
+  const card = p => `
+    <article class="proj">
+      <div class="proj-img"><img src="${p.imagen}" alt="${esc(p.titulo)}" loading="lazy"></div>
+      <div>
+        <h3>${esc(p.titulo)}</h3>
+        <p>${esc(p.descripcion)}</p>
+        <div class="tags">${p.tecnologias.map(t => `<span>${esc(t)}</span>`).join('')}</div>
+        ${p.link ? `<a class="visit" href="${p.link}" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i> Visitar sitio</a>` : ''}
+      </div>
+    </article>`;
+  $$('.folder').forEach(f => {
+    const idx = f.dataset.i;
+    if (idx !== 'all') $('.name', f).textContent = projects[idx].titulo;
+    f.addEventListener('click', () => {
+      $('#projectsBody').innerHTML = (idx === 'all' ? projects : [projects[idx]]).map(card).join('');
+      openModal(pm);
     });
-    
+  });
+}
+
+/* ===== FAQ ===== */
+function initFaq() {
+  const list = $('#faqList');
+  list.innerHTML = faqs.map(([q, a], i) => `
+    <div class="faq-item">
+      <button class="faq-q" aria-expanded="false" aria-controls="fa${i}">${q}<span class="faq-ico"><i class="fas fa-chevron-down"></i></span></button>
+      <div class="faq-a" id="fa${i}" role="region"><div>${a}</div></div>
+    </div>`).join('');
+  $$('.faq-item', list).forEach(item => $('.faq-q', item).addEventListener('click', () => {
+    const open = !item.classList.contains('open');
+    $$('.faq-item', list).forEach(o => { o.classList.remove('open'); $('.faq-q', o).setAttribute('aria-expanded', 'false'); });
+    item.classList.toggle('open', open);
+    $('.faq-q', item).setAttribute('aria-expanded', open);
+  }));
+}
+
+/* ===== CARRUSEL MÓVIL (scroll-snap nativo) ===== */
+function initCarousel() {
+  const track = $('#carouselTrack');
+  track.innerHTML = Array.from({ length: 10 }, (_, i) => `<img src="${phone(i + 1)}" alt="Ejemplo de sitio ${i + 1}" loading="lazy">`).join('');
+  const go = dir => {
+    const max = track.scrollWidth - track.clientWidth;
+    const next = track.scrollLeft + dir * track.clientWidth;
+    track.scrollTo({ left: next > max + 5 ? 0 : next < 0 ? max : next, behavior: 'smooth' });
+  };
+  $('#prevBtn').addEventListener('click', () => go(-1));
+  $('#nextBtn').addEventListener('click', () => go(1));
+}
+
+/* ===== FORMULARIO ===== */
+function initForm() {
+  const form = $('#contactForm');
+  const ready = !EMAILJS.template.startsWith('TU_') && !EMAILJS.key.startsWith('TU_') && typeof emailjs !== 'undefined';
+  if (ready) emailjs.init(EMAILJS.key);
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const { email, subject, message } = form.elements;
+    let ok = true;
+    [email, subject, message].forEach(f => {
+      const valid = f.value.trim() && (f !== email || /^\S+@\S+\.\S+$/.test(f.value));
+      f.classList.toggle('invalid', !valid);
+      ok = ok && valid;
+    });
+    if (!ok) return toast('Revisá los campos marcados e intentá de nuevo.', 'err');
+
+    // Sin EmailJS configurado: abre el correo del usuario como alternativa
+    if (!ready) {
+      location.href = `mailto:${MAIL}?subject=${encodeURIComponent(subject.value)}&body=${encodeURIComponent(message.value + '\n\n' + email.value)}`;
+      return;
+    }
+    const btn = $('.send', form), label = btn.textContent;
+    btn.textContent = 'Enviando...';
+    btn.disabled = true;
+    emailjs.send(EMAILJS.service, EMAILJS.template, {
+      from_name: email.value.split('@')[0], from_email: email.value,
+      subject: subject.value, message: message.value, to_name: 'Nahuel'
+    })
+      .then(() => { toast('Mensaje enviado. Te respondo a la brevedad.', 'ok'); form.reset(); })
+      .catch(err => { console.error(err); toast(`No se pudo enviar. Escribime a ${MAIL}`, 'err'); })
+      .finally(() => { btn.textContent = label; btn.disabled = false; });
+  });
+  $$('input,textarea', form).forEach(f => f.addEventListener('input', () => f.classList.remove('invalid')));
+}
+
+/* ===== INICIO ===== */
+initLoader();
+document.addEventListener('DOMContentLoaded', () => {
+  initMarquees();
+  initMenu();
+  initAbout();
+  initModals();
+  initFaq();
+  initCarousel();
+  initForm();
+});
 })();
